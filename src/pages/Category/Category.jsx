@@ -1,19 +1,23 @@
-import { FaTrashAlt } from "react-icons/fa";
+import { FaFilePdf, FaTrashAlt } from "react-icons/fa";
 import useCategory from "../../hooks/useCategory";
 import { useState } from "react";
 import AddCategoryModal from "./AddCategoryModal";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { pdf } from '@react-pdf/renderer';
+import { saveAs } from 'file-saver';
+import CategoryPDFDocument from "../../components/CategoryPDFDocument";
+import DateRangeModal from "../../components/DateRangeModal";
 
 const Category = () => {
-    const [category,refetch] = useCategory();
+    const [category, refetch] = useCategory();
     const [showModal, setShowModal] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
     const [sortOrder, setSortOrder] = useState("recent");
+    const [showDateRangeModal, setShowDateRangeModal] = useState(false);
     const itemsPerPage = 10;
     const axiosSecure = useAxiosSecure();
-   
 
     const handleAddCategory = () => {
         setShowModal(true);
@@ -29,14 +33,13 @@ const Category = () => {
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);
-        setCurrentPage(1); // Reset to the first page on new search
+        setCurrentPage(1);
     };
 
     const handleSortChange = (e) => {
         setSortOrder(e.target.value);
     };
 
-    // Filter and sort categories
     const filteredCategories = category
         .filter((item) => item.name.toLowerCase().includes(searchQuery.toLowerCase()))
         .sort((a, b) => {
@@ -64,7 +67,6 @@ const Category = () => {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-
                 axiosSecure.delete(`/category/${id}`)
                     .then(res => {
                         if (res.data.deletedCount > 0) {
@@ -78,8 +80,18 @@ const Category = () => {
                     })
             }
         });
-    }
+    };
 
+    const handleDownload = async (startDate, endDate) => {
+        const filteredForPDF = category
+            .filter((item) => {
+                const itemDate = new Date(item.start_date);
+                return itemDate >= startDate && itemDate <= endDate;
+            });
+
+        const blob = await pdf(<CategoryPDFDocument categories={filteredForPDF} />).toBlob();
+        saveAs(blob, 'categories.pdf');
+    };
 
     return (
         <div className="overflow-x-auto">
@@ -87,7 +99,7 @@ const Category = () => {
                 <h2 className="text-lg text-violet-500 font-bold">
                     Categories: {filteredCategories.length}
                 </h2>
-                <div className="flex justify-center items-center gap-4">
+                <div className="lg:flex space-y-2 ml-3 justify-center items-center gap-4">
                     <input
                         type="text"
                         placeholder="Search by category name"
@@ -103,6 +115,12 @@ const Category = () => {
                         <option value="recent">Newest</option>
                         <option value="old">Oldest</option>
                     </select>
+                    <button
+                        className="border-b-4 hover:text-violet-500 px-3 py-2 rounded-lg "
+                        onClick={() => setShowDateRangeModal(true)}
+                    >
+                        <FaFilePdf />
+                    </button>
                 </div>
                 <button
                     className="border-b-4 text-violet-500 hover:text-white hover:bg-violet-500 px-3 py-2 rounded-lg border-violet-500"
@@ -114,20 +132,20 @@ const Category = () => {
 
             <table className="table-auto w-full">
                 <thead>
-                    <tr>
-                        <th className="w-1/12 px-4 py-2">#</th>
-                        <th className="w-2/12 px-4 py-2">Category Image</th>
-                        <th className="w-3/12 px-4 py-2">Category Name</th>
-                        <th className="w-3/12 px-4 py-2">Date</th>
-                        <th className="w-3/12 px-4 py-2 text-center">Action</th>
+                    <tr className="border-t border-b">
+                        <th className="text-center border-r border-l p-3">#</th>
+                        <th className="text-center border-r p-3">Category Image</th>
+                        <th className="text-center border-r p-3">Category Name</th>
+                        <th className="text-center border-r p-3">Date</th>
+                        <th className="text-center border-r p-3">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {currentItems.map((item, index) => (
-                        <tr key={item._id} className="border-t">
-                            <td className="px-8 py-2">{index + 1 + indexOfFirstItem}</td>
-                            <td className="px-10 py-2">
-                                <div className="flex items-center gap-3">
+                        <tr key={item._id} className=" border-b ">
+                            <td className="text-center px-4 py-2 border-r border-l">{index + 1 + indexOfFirstItem}</td>
+                            <td className="text-center px-4 py-2 border-r">
+                                <div className="flex items-center justify-center gap-3">
                                     <div className="avatar">
                                         <div className="mask mask-squircle w-12 h-12">
                                             <img src={item.image_url} alt="Category Image" />
@@ -135,9 +153,9 @@ const Category = () => {
                                     </div>
                                 </div>
                             </td>
-                            <td className="pl-24 py-2">{item.name}</td>
-                            <td className="pl-24 py-2">{new Date(item.start_date).toLocaleDateString()}</td>
-                            <td className="px-4 py-2 text-center">
+                            <td className="text-center px-4 py-2 border-r">{item.name}</td>
+                            <td className="text-center px-4 py-2 border-r">{new Date(item.start_date).toLocaleDateString()}</td>
+                            <td className="text-center px-4 py-2 border-r">
                                 <div className="flex justify-center gap-2">
                                     <button onClick={() => handleDelete(item._id)} className="btn btn-ghost btn-lg">
                                         <FaTrashAlt className="text-red-600" />
@@ -162,6 +180,11 @@ const Category = () => {
             </div>
 
             <AddCategoryModal show={showModal} handleClose={handleCloseModal} />
+            <DateRangeModal
+                show={showDateRangeModal}
+                handleClose={() => setShowDateRangeModal(false)}
+                handleDownload={handleDownload}
+            />
         </div>
     );
 };
