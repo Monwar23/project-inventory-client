@@ -25,6 +25,9 @@ const AddCategoryModal = ({ show, handleClose }) => {
                 toast.success('Category Added Successfully');
                 handleClose();
                 refetch();
+                setCategoryName('');
+                setCategoryImage('');
+                setStartDate(new Date());
             } else {
                 toast.error('Failed to add category');
             }

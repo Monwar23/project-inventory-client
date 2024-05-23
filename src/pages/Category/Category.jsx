@@ -1,15 +1,19 @@
-import { FaRegEdit, FaTrashAlt } from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
 import useCategory from "../../hooks/useCategory";
 import { useState } from "react";
 import AddCategoryModal from "./AddCategoryModal";
+import Swal from "sweetalert2";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Category = () => {
-    const [category] = useCategory();
+    const [category,refetch] = useCategory();
     const [showModal, setShowModal] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
     const [sortOrder, setSortOrder] = useState("recent");
     const itemsPerPage = 10;
+    const axiosSecure = useAxiosSecure();
+   
 
     const handleAddCategory = () => {
         setShowModal(true);
@@ -48,6 +52,34 @@ const Category = () => {
     const currentItems = filteredCategories.slice(indexOfFirstItem, indexOfLastItem);
 
     const totalPages = Math.ceil(filteredCategories.length / itemsPerPage);
+
+    const handleDelete = id => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                axiosSecure.delete(`/category/${id}`)
+                    .then(res => {
+                        if (res.data.deletedCount > 0) {
+                            refetch();
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success"
+                            });
+                        }
+                    })
+            }
+        });
+    }
+
 
     return (
         <div className="overflow-x-auto">
@@ -107,10 +139,7 @@ const Category = () => {
                             <td className="pl-24 py-2">{new Date(item.start_date).toLocaleDateString()}</td>
                             <td className="px-4 py-2 text-center">
                                 <div className="flex justify-center gap-2">
-                                    <button className="btn btn-ghost btn-lg">
-                                        <FaRegEdit className="text-violet-500" />
-                                    </button>
-                                    <button className="btn btn-ghost btn-lg">
+                                    <button onClick={() => handleDelete(item._id)} className="btn btn-ghost btn-lg">
                                         <FaTrashAlt className="text-red-600" />
                                     </button>
                                 </div>
