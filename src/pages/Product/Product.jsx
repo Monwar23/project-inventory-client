@@ -1,9 +1,14 @@
-import { FaTrashAlt } from "react-icons/fa";
+import { FaFilePdf, FaTrashAlt } from "react-icons/fa";
 import useProduct from "../../hooks/useProduct";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { useState, useEffect } from "react";
-import axios from "axios"; // For fetching categories
+import axios from "axios";
+import { pdf } from "@react-pdf/renderer";
+import ProductPDFDocument from "../../components/ProductPDFDocument";
+import { saveAs } from 'file-saver';
+import useSupplier from "../../hooks/useSupplier";
+
 
 const Product = () => {
     const [product, refetch] = useProduct();
@@ -12,7 +17,6 @@ const Product = () => {
     const itemsPerPage = 10;
     const [searchQuery, setSearchQuery] = useState("");
     const [sortOrder, setSortOrder] = useState("recent");
-
     const [categories, setCategories] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [formData, setFormData] = useState({
@@ -24,12 +28,12 @@ const Product = () => {
         sales_price: 0,
         category: ""
     });
-
-    const [selectedCategory, setSelectedCategory] = useState(""); // Step 1
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const [supplier] = useSupplier()
+    const [supplierName, setSupplierName] = useState("");
 
 
     useEffect(() => {
-        // Fetch categories from the backend
         axios.get('http://localhost:8000/category')
             .then(response => {
                 setCategories(response.data);
@@ -39,9 +43,35 @@ const Product = () => {
             });
     }, []);
 
+    const handleDownload = async () => {
+        const blob = await pdf(<ProductPDFDocument products={product} />).toBlob();
+        saveAs(blob, 'products.pdf');
+    };
+
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+    };
+
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        const formData = new FormData();
+        formData.append('image', file);
+
+        const apiKey = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+
+        axios.post(`https://api.imgbb.com/1/upload?key=${apiKey}`, formData)
+            .then(response => {
+                setFormData(prevState => ({
+                    ...prevState,
+                    image: response.data.data.url
+                }));
+            })
+            .catch(error => {
+                console.error("Error uploading image:", error);
+                Swal.fire("Error", "Failed to upload image", "error");
+            });
     };
 
     const handleFormSubmit = (e) => {
@@ -51,6 +81,15 @@ const Product = () => {
                 refetch();
                 setShowModal(false);
                 Swal.fire("Success", "Product added successfully", "success");
+                setFormData({
+                    product_name: "",
+                    image: "",
+                    quantity: 0,
+                    supplier_name: "",
+                    purchase_price: 0,
+                    sales_price: 0,
+                    category: ""
+                });
             })
             .catch(error => {
                 console.error("Error adding product:", error);
@@ -66,11 +105,11 @@ const Product = () => {
     const handleSortChange = (e) => {
         setSortOrder(e.target.value);
     };
+
     const handleCategoryChange = (e) => {
         setSelectedCategory(e.target.value);
-        setCurrentPage(1); // Reset pagination when category changes
+        setCurrentPage(1);
     };
-
 
     const filteredProduct = product
         .filter((item) => item.product_name.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -90,7 +129,6 @@ const Product = () => {
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredProduct.slice(indexOfFirstItem, indexOfLastItem);
-
     const totalPages = Math.ceil(filteredProduct.length / itemsPerPage);
 
     const handleDelete = id => {
@@ -127,7 +165,6 @@ const Product = () => {
                 </h2>
                 <div className="flex justify-center items-center gap-4">
                     <div>
-                        {/* UI Component for Category Filter */}
                         <select
                             value={selectedCategory}
                             onChange={handleCategoryChange}
@@ -154,6 +191,15 @@ const Product = () => {
                         <option value="recent">Newest</option>
                         <option value="old">Oldest</option>
                     </select>
+                    <div className="flex justify-center gap-4">
+                        {/* Button for PDF download */}
+                        <button
+                            onClick={handleDownload}
+                            className="border-b-4 hover:text-violet-500 px-3 py-2 rounded-lg "
+                        >
+                            <FaFilePdf />
+                        </button>
+                    </div>
                 </div>
                 <button
                     onClick={() => setShowModal(true)}
@@ -222,93 +268,101 @@ const Product = () => {
             </div>
 
             {showModal && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 transition-opacity">
-                    <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative transition-transform transform-gpu">
-                        <button
-                            onClick={() => setShowModal(false)}
-                            className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
-                        >
-                            &times;
-                        </button>
-                        <h2 className="text-2xl mb-4 text-violet-500 font-semibold text-center">Add New Product</h2>
-                        <form onSubmit={handleFormSubmit} className="space-y-6">
-                            <div>
-                                <label htmlFor="product_name" className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-8 rounded-lg shadow-lg w-1/2">
+                        <h2 className="text-xl mb-4">Add Product</h2>
+                        <form onSubmit={handleFormSubmit}>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700">
+                                    Product Name
+                                </label>
                                 <input
                                     type="text"
                                     name="product_name"
-                                    placeholder="Product Name"
                                     value={formData.product_name}
                                     onChange={handleInputChange}
-                                    className="input-field w-full px-1 py-1 border rounded-lg border-violet-500"
+                                    className="mt-1 block w-full border px-3 py-2 rounded-lg" required
                                 />
                             </div>
-                            <div>
-                                <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700">
+                                    Image
+                                </label>
                                 <input
-                                    type="text"
-                                    name="image"
-                                    placeholder="Image URL"
-                                    value={formData.image}
-                                    onChange={handleInputChange}
-                                    className="input-field w-full px-1 py-1 border rounded-lg border-violet-500"
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageUpload}
+                                    className="mt-1 block w-full border px-3 py-2 rounded-lg" required
                                 />
                             </div>
-                            <div className="flex justify-between space-x-4">
-                                <div className="w-1/2">
-                                    <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+                            <div className="flex gap-x-3">
+                                <div className="mb-4 flex-grow">
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        Quantity
+                                    </label>
                                     <input
                                         type="number"
                                         name="quantity"
-                                        placeholder="Quantity"
                                         value={formData.quantity}
                                         onChange={handleInputChange}
-                                        className="input-field px-1 py-1 rounded-lg border border-violet-500"
+                                        className="mt-1 block w-full border px-3 py-2 rounded-lg" required
                                     />
                                 </div>
-                                <div className="w-1/2">
-                                    <label htmlFor="supplier_name" className="block text-sm font-medium text-gray-700 mb-1">Supplier Name</label>
-                                    <input
-                                        type="text"
+                                <div className="mb-4 flex-grow">
+                                <label className="block text-sm font-medium text-gray-700">
+                                        Supplier 
+                                    </label>
+                                    <select
                                         name="supplier_name"
-                                        placeholder="Supplier Name"
-                                        value={formData.supplier_name}
-                                        onChange={handleInputChange}
-                                        className="input-field px-1 py-1 border rounded-lg border-violet-500"
-                                    />
+                                        value={supplierName}
+                                        onChange={(e) => setSupplierName(e.target.value)}
+                                        className="mt-1 block w-full border px-3 py-2 rounded-lg"
+                                        required
+                                    >
+                                        <option value="">Select Supplier</option>
+                                        {supplier.map(supply => (
+                                            <option key={supply._id} value={supply.supplier_name}>{supply.supplier_name}</option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
-                            <div className="flex justify-between space-x-4">
-                                <div className="w-1/2">
-                                    <label htmlFor="purchase_price" className="block text-sm font-medium text-gray-700 mb-1">Purchase Price ($)</label>
+
+
+                            <div className="flex gap-x-3">
+                                <div className="mb-4 flex-grow">
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        Purchase Price
+                                    </label>
                                     <input
                                         type="number"
                                         name="purchase_price"
-                                        placeholder="Purchase Price"
                                         value={formData.purchase_price}
                                         onChange={handleInputChange}
-                                        className="input-field px-1 py-1 rounded-lg border border-violet-500"
+                                        className="mt-1 block w-full border px-3 py-2 rounded-lg" required
                                     />
                                 </div>
-                                <div className="w-1/2">
-                                    <label htmlFor="sales_price" className="block text-sm font-medium text-gray-700 mb-1">Sales Price ($)</label>
+                                <div className="mb-4 flex-grow">
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        Sales Price
+                                    </label>
                                     <input
                                         type="number"
                                         name="sales_price"
-                                        placeholder="Sales Price"
                                         value={formData.sales_price}
                                         onChange={handleInputChange}
-                                        className="input-field px-1 py-1 border border-violet-500 rounded-lg"
+                                        className="mt-1 block w-full border px-3 py-2 rounded-lg" required
                                     />
                                 </div>
                             </div>
-                            <div>
-                                <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700">
+                                    Category
+                                </label>
                                 <select
                                     name="category"
                                     value={formData.category}
                                     onChange={handleInputChange}
-                                    className="input-field w-full px-1 py-1 border border-violet-500 rounded-lg"
+                                    className="mt-1 block w-full border px-3 py-2 rounded-lg" required
                                 >
                                     <option value="">Select Category</option>
                                     {categories.map(category => (
@@ -316,16 +370,18 @@ const Product = () => {
                                     ))}
                                 </select>
                             </div>
-                            <div className="flex justify-end">
+                            <div className="flex justify-end gap-4">
+
                                 <button
                                     type="submit"
-                                    className="btn border-b-4 text-violet-500 border-violet-500 hover:bg-violet-500 hover:text-white "
+                                    className="bg-violet-500 text-white px-4 py-2 rounded-lg"
                                 >
-                                    Add Product
+                                    Save
                                 </button>
                                 <button
+                                    type="button"
                                     onClick={() => setShowModal(false)}
-                                    className="btn border-b-4 text-violet-500 border-red-500 hover:bg-red-500 hover:text-white  ml-2"
+                                    className="border px-4 py-2 rounded-lg"
                                 >
                                     Cancel
                                 </button>
@@ -334,8 +390,6 @@ const Product = () => {
                     </div>
                 </div>
             )}
-
-
         </div>
     );
 };

@@ -3,21 +3,51 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import useCategory from '../../hooks/useCategory';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
+import axios from 'axios';
 import toast from 'react-hot-toast';
 
 const AddCategoryModal = ({ show, handleClose }) => {
     const [categoryName, setCategoryName] = useState('');
-    const [categoryImage, setCategoryImage] = useState('');
-    const [ , refetch] = useCategory();
+    const [categoryFile, setCategoryFile] = useState(null);
+    const [, refetch] = useCategory();
     const axiosSecure = useAxiosSecure();
     const [startDate, setStartDate] = useState(new Date());
 
+    const handleFileChange = (e) => {
+        setCategoryFile(e.target.files[0]);
+    };
+
+    const uploadImageToImgBB = async (file) => {
+        const formData = new FormData();
+        formData.append('image', file);
+
+        const apiKey = import.meta.env.VITE_IMAGE_HOSTING_KEY; // Replace with your ImgBB API key
+        const response = await axios.post(`https://api.imgbb.com/1/upload?key=${apiKey}`, formData);
+
+        return response.data.data.url;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!categoryFile) {
+            toast.error('Please select an image file');
+            return;
+        }
+
+        let imageUrl;
+        try {
+            imageUrl = await uploadImageToImgBB(categoryFile);
+        } catch (error) {
+            toast.error('Failed to upload image');
+            console.error(error);
+            return;
+        }
+
         try {
             const response = await axiosSecure.post('/category', {
                 name: categoryName,
-                image_url: categoryImage,
+                image_url: imageUrl,
                 start_date: startDate
             });
 
@@ -26,7 +56,7 @@ const AddCategoryModal = ({ show, handleClose }) => {
                 handleClose();
                 refetch();
                 setCategoryName('');
-                setCategoryImage('');
+                setCategoryFile(null);
                 setStartDate(new Date());
             } else {
                 toast.error('Failed to add category');
@@ -55,14 +85,12 @@ const AddCategoryModal = ({ show, handleClose }) => {
                             />
                         </div>
                         <div>
-                            <label htmlFor="categoryImage" className="block text-gray-700 font-bold mb-2">Category Image URL</label>
+                            <label htmlFor="categoryFile" className="block text-gray-700 font-bold mb-2">Category Image File</label>
                             <input
-                                type="text"
-                                id="categoryImage"
+                                type="file"
+                                id="categoryFile"
                                 className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                placeholder="Enter category image URL"
-                                value={categoryImage}
-                                onChange={(e) => setCategoryImage(e.target.value)}
+                                onChange={handleFileChange}
                             />
                         </div>
                         <div>
@@ -73,7 +101,11 @@ const AddCategoryModal = ({ show, handleClose }) => {
                                 className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             />
                         </div>
-                        <button type="submit" className="w-full border-b-4 text-violet-500 mb-6 hover:text-white hover:bg-violet-500 px-3 py-2 rounded-lg border-violet-500 border-t-2">Add Category</button>
+                        <div className="flex justify-end gap-3">
+                            
+                            <button type="submit" className="bg-violet-500 text-white px-4 py-2 rounded-lg">Add</button>
+                            <button type="button" onClick={handleClose} className="border px-4 py-2 rounded-lg">Cancel</button>
+                        </div>
                     </form>
                 </div>
             </div>
