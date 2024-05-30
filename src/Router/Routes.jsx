@@ -8,6 +8,9 @@ import Supplier from "../pages/supplier/Supplier";
 import Purchase from "../pages/purchase/Purchase";
 import Sales from "../pages/sales/Sales";
 import Report from "../pages/report/Report";
+import UpdateProduct from "../pages/Product/UpdateProduct";
+import UpdateSupplier from "../pages/supplier/UpdateSupplier";
+import UpdatePurchase from "../pages/purchase/UpdatePurchase";
 
 
 export const router = createBrowserRouter([
@@ -28,6 +31,11 @@ export const router = createBrowserRouter([
             element:<Product></Product>
         },
         {
+            path:'/updateProduct/:id',
+            element:<UpdateProduct></UpdateProduct>,
+            loader:({params})=>fetch(`http://localhost:8000/product/${params.id}`)
+        },
+        {
             path:'/customer',
             element:<Customer></Customer>
         },
@@ -36,8 +44,18 @@ export const router = createBrowserRouter([
             element:<Supplier></Supplier>
         },
         {
+            path:'/updateSupplier/:id',
+            element:<UpdateSupplier></UpdateSupplier>,
+            loader:({params})=>fetch(`http://localhost:8000/supplier/${params.id}`)
+        },
+        {
             path:'/purchase',
             element:<Purchase></Purchase>
+        },
+        {
+            path:'/updatePurchase/:id',
+            element:<UpdatePurchase></UpdatePurchase>,
+            loader:({params})=>fetch(`http://localhost:8000/purchase/${params.id}`)
         },
         {
             path:'/sales',

@@ -1,8 +1,9 @@
-import { FaTrashAlt } from "react-icons/fa";
+import { FaRegEdit, FaTrashAlt } from "react-icons/fa";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useState } from "react";
 import useSupplier from "../../hooks/useSupplier";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 const Supplier = () => {
 
@@ -118,10 +119,10 @@ const Supplier = () => {
                 <h2 className="text-lg text-violet-500 font-bold">
                     Supplier: {filteredSupplier.length}
                 </h2>
-                <div className="lg:flex space-y-2 ml-3 justify-center items-center gap-4">
+                <div className=" space-y-2 space-x-2 ml-3 justify-center items-center gap-4">
                     <input
                         type="text"
-                        placeholder="Search by category name"
+                        placeholder="Search by Supplier name"
                         value={searchQuery}
                         onChange={handleSearchChange}
                         className="border px-3 py-2 rounded-lg"
@@ -170,6 +171,12 @@ const Supplier = () => {
                             <td className="text-center px-4 py-2 border-r">{new Date(item.time_added).toLocaleDateString()}</td>
                             <td className="text-center px-4 py-2 border-r">
                                 <div className="flex justify-center gap-2">
+                                <Link to={`/updateSupplier/${item._id}`}>
+                                   <button
+                                        className="btn btn-ghost btn-lg">
+                                        <FaRegEdit className="text-red-600" />
+                                    </button>
+                                   </Link>
                                     <button
                                         onClick={() => handleDelete(item._id)}
                                         className="btn btn-ghost btn-lg">
@@ -196,7 +203,7 @@ const Supplier = () => {
             {showModal && (
                 <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex justify-center items-center">
                     <div className="bg-white p-6 rounded-lg">
-                        <h2 className="text-lg font-bold mb-4">Add New Supplier</h2>
+                        <h2 className="text-lg font-bold mb-4 text-center">Add New Supplier</h2>
                         <form onSubmit={handleSubmit}>
                             <div className="mb-4">
                                 <label htmlFor="supplier_name" className="block mb-1">Supplier Name:</label>
@@ -215,8 +222,8 @@ const Supplier = () => {
                                 <input type="date" id="date" name="date" value={newSupplierData.date} onChange={handleInputChange} className="border px-3 py-2 rounded-lg w-full" required/>
                             </div>
                             <div className="flex justify-end">
-                                <button type="button" onClick={handleModalClose} className="mr-2 px-4 py-2 border rounded-lg">Cancel</button>
                                 <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-lg">Add</button>
+                                <button type="button" onClick={handleModalClose} className="mr-2 px-4 py-2 border rounded-lg">Cancel</button>
                             </div>
                         </form>
                     </div>

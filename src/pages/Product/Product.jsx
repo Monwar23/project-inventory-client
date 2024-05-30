@@ -1,4 +1,4 @@
-import { FaFilePdf, FaTrashAlt } from "react-icons/fa";
+import { FaFilePdf, FaRegEdit, FaTrashAlt } from "react-icons/fa";
 import useProduct from "../../hooks/useProduct";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
@@ -8,6 +8,7 @@ import { pdf } from "@react-pdf/renderer";
 import ProductPDFDocument from "../../components/ProductPDFDocument";
 import { saveAs } from 'file-saver';
 import useSupplier from "../../hooks/useSupplier";
+import { Link } from "react-router-dom";
 
 
 const Product = () => {
@@ -30,7 +31,7 @@ const Product = () => {
     });
     const [selectedCategory, setSelectedCategory] = useState("");
     const [supplier] = useSupplier()
-    const [supplierName, setSupplierName] = useState("");
+    // const [supplierName, setSupplierName] = useState("");
 
 
     useEffect(() => {
@@ -244,6 +245,12 @@ const Product = () => {
                             <td className="py-2 px-4 border-r">${item.sales_price}</td>
                             <td className="py-2 px-4 border-r">
                                 <div className="flex justify-center gap-2">
+                                   <Link to={`/updateProduct/${item._id}`}>
+                                   <button
+                                        className="btn btn-ghost btn-lg">
+                                        <FaRegEdit className="text-red-600" />
+                                    </button>
+                                   </Link>
                                     <button
                                         onClick={() => handleDelete(item._id)}
                                         className="btn btn-ghost btn-lg">
@@ -270,7 +277,7 @@ const Product = () => {
             {showModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-8 rounded-lg shadow-lg w-1/2">
-                        <h2 className="text-xl mb-4">Add Product</h2>
+                        <h2 className="text-lg font-bold mb-4 text-center">Add Product</h2>
                         <form onSubmit={handleFormSubmit}>
                             <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700">
@@ -314,8 +321,8 @@ const Product = () => {
                                     </label>
                                     <select
                                         name="supplier_name"
-                                        value={supplierName}
-                                        onChange={(e) => setSupplierName(e.target.value)}
+                                        value={formData.supplier_name}
+                                        onChange={handleInputChange}
                                         className="mt-1 block w-full border px-3 py-2 rounded-lg"
                                         required
                                     >
