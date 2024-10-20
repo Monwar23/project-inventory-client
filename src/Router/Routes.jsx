@@ -11,6 +11,7 @@ import UpdateProduct from "../pages/Product/UpdateProduct";
 import UpdateSupplier from "../pages/supplier/UpdateSupplier";
 import UpdatePurchase from "../pages/purchase/UpdatePurchase";
 import UpdateSales from "../pages/sales/UpdateSales";
+import SignIn from "../pages/Signin/SignIn";
 
 
 export const router = createBrowserRouter([
@@ -67,6 +68,14 @@ export const router = createBrowserRouter([
             path:'/report',
             element:<Report></Report>
         },
+        {
+            path:'/signIn',
+            element:<SignIn></SignIn>
+        },
+        // {
+        //     path:'/signUp',
+        //     element:<Report></Report>
+        // },
       ]
     },
     

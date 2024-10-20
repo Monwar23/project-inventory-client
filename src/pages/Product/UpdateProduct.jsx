@@ -62,7 +62,7 @@ const UpdateProduct = () => {
            <div className="flex space-x-2">
            <div className="mb-3 flex-grow">
                 <label htmlFor="quantity" className="block font-medium ">Quantity</label>
-                <input type="text" id="quantity" defaultValue={quantity} name="quantity" placeholder="quantity" className="mt-1 block w-full rounded-md border border-violet-500 shadow-sm h-10 px-2" />
+                <input type="text" id="quantity" defaultValue={quantity} min='1' name="quantity" placeholder="quantity" className="mt-1 block w-full rounded-md border border-violet-500 shadow-sm h-10 px-2" />
             </div>
 
             <div className="mb-3 flex-grow">
@@ -74,11 +74,11 @@ const UpdateProduct = () => {
           <div className="flex space-x-2">
           <div className="mb-3 flex-grow">
                 <label htmlFor="purchase_price" className="block font-medium ">Purchase Price</label>
-                <input type="text" id="purchase_price" defaultValue={purchase_price} name="purchase_price" placeholder="purchase_price" className="mt-1 block w-full  rounded-md shadow-sm h-10 px-2 border border-violet-500" />
+                <input type="text" id="purchase_price" min='1' defaultValue={purchase_price} name="purchase_price" placeholder="purchase_price" className="mt-1 block w-full  rounded-md shadow-sm h-10 px-2 border border-violet-500" />
             </div>
             <div className="mb-3 flex-grow">
                 <label htmlFor="sales_price" className="block font-medium ">Sales Price</label>
-                <input id="sales_price" name="sales_price" defaultValue={sales_price} placeholder="sales_price" required rows="3" className="mt-1 block w-full  rounded-md shadow-sm h-10 px-2 border border-violet-500"></input>
+                <input id="sales_price" name="sales_price" defaultValue={sales_price} placeholder="sales_price" required rows="3" min='1' className="mt-1 block w-full  rounded-md shadow-sm h-10 px-2 border border-violet-500"></input>
             </div>
           </div>
             <div className="mb-3">

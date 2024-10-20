@@ -127,7 +127,7 @@ const UpdateSales = () => {
                         name="quantity"
                         defaultValue={quantity}
                         placeholder="Quantity"
-                        required
+                        required min='1'
                         className="mt-1 block w-full rounded-md shadow-sm h-10 px-2 border border-violet-500"
                     />
                 </div>
@@ -139,7 +139,7 @@ const UpdateSales = () => {
                         name="price"
                         defaultValue={price}
                         placeholder="Price"
-                        required
+                        required min='1'
                         className="mt-1 block w-full rounded-md shadow-sm h-10 px-2 border border-violet-500"
                     />
                 </div>

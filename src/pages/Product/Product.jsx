@@ -312,7 +312,7 @@ const Product = () => {
                                         name="quantity"
                                         value={formData.quantity}
                                         onChange={handleInputChange}
-                                        className="mt-1 block w-full border px-3 py-2 rounded-lg" required
+                                        className="mt-1 block w-full border px-3 py-2 rounded-lg" required min='1'
                                     />
                                 </div>
                                 <div className="mb-4 flex-grow">
@@ -345,7 +345,7 @@ const Product = () => {
                                         name="purchase_price"
                                         value={formData.purchase_price}
                                         onChange={handleInputChange}
-                                        className="mt-1 block w-full border px-3 py-2 rounded-lg" required
+                                        className="mt-1 block w-full border px-3 py-2 rounded-lg" required min='1'
                                     />
                                 </div>
                                 <div className="mb-4 flex-grow">
@@ -357,7 +357,7 @@ const Product = () => {
                                         name="sales_price"
                                         value={formData.sales_price}
                                         onChange={handleInputChange}
-                                        className="mt-1 block w-full border px-3 py-2 rounded-lg" required
+                                        className="mt-1 block w-full border px-3 py-2 rounded-lg" required min='1'
                                     />
                                 </div>
                             </div>

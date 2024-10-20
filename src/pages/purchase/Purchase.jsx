@@ -118,7 +118,6 @@ const Purchase = () => {
                 Swal.fire("Error", "Failed to upload image", "error");
             });
     };
-
     const handleSubmit = (e) => {
         e.preventDefault();
         axiosSecure.post('/purchase', newPurchaseData)
@@ -298,7 +297,7 @@ const Purchase = () => {
                                     value={newPurchaseData.purchase_price}
                                     onChange={handleInputChange}
                                     className="mt-1 block w-full border px-3 py-2 rounded-lg"
-                                    required
+                                    required min='1'
                                 />
                             </div>
                             <div className="mb-4 flex-grow">
@@ -311,7 +310,7 @@ const Purchase = () => {
                                     value={newPurchaseData.sales_price}
                                     onChange={handleInputChange}
                                     className="mt-1 block w-full border px-3 py-2 rounded-lg"
-                                    required
+                                    required min='1'
                                 />
                             </div>
                            </div>
@@ -326,7 +325,7 @@ const Purchase = () => {
                                     value={newPurchaseData.quantity}
                                     onChange={handleInputChange}
                                     className="mt-1 block w-full border px-3 py-2 rounded-lg"
-                                    required
+                                    required min='1'
                                 />
                             </div>
                           

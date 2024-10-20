@@ -101,7 +101,7 @@ const UpdatePurchase = () => {
                         name="quantity"
                         defaultValue={quantity}
                         placeholder="Quantity"
-                        required
+                        required min='1'
                         className="mt-1 block w-full rounded-md shadow-sm h-10 px-2 border border-violet-500"
                     />
                 </div>
@@ -113,7 +113,7 @@ const UpdatePurchase = () => {
                         name="purchase_price"
                         defaultValue={purchase_price}
                         placeholder="Purchase Price"
-                        required
+                        required min='1'
                         className="mt-1 block w-full rounded-md shadow-sm h-10 px-2 border border-violet-500"
                     />
                 </div>
