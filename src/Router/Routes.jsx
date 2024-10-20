@@ -3,7 +3,6 @@ import Main from "../Layout/Main";
 import Dashboard from "../pages/Dashboard";
 import Category from "../pages/Category/Category";
 import Product from "../pages/Product/Product";
-import Customer from "../pages/customer/Customer";
 import Supplier from "../pages/supplier/Supplier";
 import Purchase from "../pages/purchase/Purchase";
 import Sales from "../pages/sales/Sales";
@@ -11,6 +10,7 @@ import Report from "../pages/report/Report";
 import UpdateProduct from "../pages/Product/UpdateProduct";
 import UpdateSupplier from "../pages/supplier/UpdateSupplier";
 import UpdatePurchase from "../pages/purchase/UpdatePurchase";
+import UpdateSales from "../pages/sales/UpdateSales";
 
 
 export const router = createBrowserRouter([
@@ -35,10 +35,7 @@ export const router = createBrowserRouter([
             element:<UpdateProduct></UpdateProduct>,
             loader:({params})=>fetch(`http://localhost:8000/product/${params.id}`)
         },
-        {
-            path:'/customer',
-            element:<Customer></Customer>
-        },
+       
         {
             path:'/supplier',
             element:<Supplier></Supplier>
@@ -60,6 +57,11 @@ export const router = createBrowserRouter([
         {
             path:'/sales',
             element:<Sales></Sales>
+        },
+        {
+            path:'/updateSales/:id',
+            element:<UpdateSales></UpdateSales>,
+            loader:({params})=>fetch(`http://localhost:8000/sales/${params.id}`)
         },
         {
             path:'/report',

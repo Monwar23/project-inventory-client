@@ -18,7 +18,6 @@ const Supplier = () => {
         supplier_name: "",
         phone: "",
         email: "",
-        date: ""
     });
 
     const handlePageChange = (newPage) => {
@@ -103,7 +102,6 @@ const Supplier = () => {
                     supplier_name: "",
                     phone: "",
                     email: "",
-                    date: ""
                 });
             })
             .catch(error => {
@@ -217,12 +215,9 @@ const Supplier = () => {
                                 <label htmlFor="email" className="block mb-1">Email:</label>
                                 <input type="email" id="email" name="email" value={newSupplierData.email} onChange={handleInputChange} className="border px-3 py-2 rounded-lg w-full" required/>
                             </div>
-                            <div className="mb-4">
-                                <label htmlFor="date" className="block mb-1">Date:</label>
-                                <input type="date" id="date" name="date" value={newSupplierData.date} onChange={handleInputChange} className="border px-3 py-2 rounded-lg w-full" required/>
-                            </div>
+                            
                             <div className="flex justify-end">
-                                <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-lg">Add</button>
+                                <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-lg mr-2">Add</button>
                                 <button type="button" onClick={handleModalClose} className="mr-2 px-4 py-2 border rounded-lg">Cancel</button>
                             </div>
                         </form>

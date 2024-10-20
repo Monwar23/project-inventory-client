@@ -1,6 +1,5 @@
 import { BiSolidCategoryAlt, BiSolidPurchaseTag, BiSolidReport } from "react-icons/bi";
 import { FaPeopleCarry, FaSignInAlt, FaUserEdit } from "react-icons/fa";
-import { FaPeopleGroup } from "react-icons/fa6";
 import { MdAddShoppingCart, MdDashboard, MdOutlineProductionQuantityLimits } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 
@@ -37,14 +36,7 @@ const SideBar = () => {
                             } to="/product">Product</NavLink></span>
                         </a>
                     </li>
-                    <li>
-                        <a rel="noopener noreferrer" href="#" className="flex items-center p-2 space-x-3 rounded-md">
-                        <FaPeopleGroup className="text-violet-500 "/>
-                            <span><NavLink className={({ isActive }) =>
-                                isActive ? 'text-violet-500  font-medium' : 'font-medium'
-                            } to="/customer">Customer</NavLink></span>
-                        </a>
-                    </li>
+                   
                     <li>
                         <a rel="noopener noreferrer" href="#" className="flex items-center p-2 space-x-3 rounded-md">
                         <FaPeopleCarry className="text-violet-500 "/>

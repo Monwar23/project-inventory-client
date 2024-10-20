@@ -26,7 +26,6 @@ const Purchase = () => {
         purchase_price: 0,
         sales_price: 0,
         quantity: 0,
-        date: ""
     });
 
     const handlePageChange = (newPage) => {
@@ -135,7 +134,6 @@ const Purchase = () => {
                     purchase_price: 0,
                     sales_price: 0,
                     quantity: 0,
-                    date: ""
                 });
             })
             .catch(error => {
@@ -180,7 +178,9 @@ const Purchase = () => {
                     <tr className="border-t border-b">
                         <th className="text-center border-r border-l p-3">#</th>
                         <th className="text-center border-r p-3">Date</th>
+                        <th className="text-center border-r p-3">Image</th>
                         <th className="text-center border-r p-3">Supplier Name</th>
+                        <th className="text-center border-r p-3">Product Name</th>
                         <th className="text-center border-r p-3">Purchase Price</th>
                         <th className="text-center border-r p-3">Action</th>
                     </tr>
@@ -190,7 +190,15 @@ const Purchase = () => {
                         <tr key={item._id} className="border-b">
                             <td className="text-center px-4 py-2 border-r border-l">{index + 1 + indexOfFirstItem}</td>
                             <td className="text-center px-4 py-2 border-r">{new Date(item.timestamp).toLocaleDateString()}</td>
+                            <td className="text-center px-4 py-2 border-r"><div className="flex items-center gap-3">
+                                    <div className="avatar">
+                                        <div className="mask mask-squircle w-12 h-12">
+                                            <img src={item.image} alt="Product Image" />
+                                        </div>
+                                    </div>
+                                </div></td>
                             <td className="text-center px-4 py-2 border-r">{item.supplier_name}</td>
+                            <td className="text-center px-4 py-2 border-r">{item.product_name}</td>
                             <td className="text-center px-4 py-2 border-r">${item.purchase_price * item.quantity}</td>
                             <td className="text-center px-4 py-2 border-r">
                                 <div className="flex justify-center gap-2">
@@ -321,19 +329,7 @@ const Purchase = () => {
                                     required
                                 />
                             </div>
-                            <div className="mb-4 flex-grow">
-                                <label className="block text-sm font-medium text-gray-700">
-                                    Date
-                                </label>
-                                <input
-                                    type="date"
-                                    name="date"
-                                    value={newPurchaseData.date}
-                                    onChange={handleInputChange}
-                                    className="mt-1 block w-full border px-3 py-2 rounded-lg"
-                                    required
-                                />
-                            </div>
+                          
                            </div>
                             <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700">
@@ -351,7 +347,7 @@ const Purchase = () => {
                                     <img src={newPurchaseData.image} alt="Product" className="h-20 w-20 object-cover" />
                                 </div>
                             )}
-                            <div className="flex justify-end">
+                            <div className="flex justify-end gap-3">
                                
                                 <button
                                     type="submit"
