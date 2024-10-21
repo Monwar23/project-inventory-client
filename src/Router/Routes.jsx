@@ -12,6 +12,10 @@ import UpdateSupplier from "../pages/supplier/UpdateSupplier";
 import UpdatePurchase from "../pages/purchase/UpdatePurchase";
 import UpdateSales from "../pages/sales/UpdateSales";
 import SignIn from "../pages/Signin/SignIn";
+import Register from "../pages/Signin/Register";
+import ManageUser from "../pages/users/ManageUser";
+import UpdateRoles from "../pages/users/UpdateRoles";
+import Just from "../pages/Signin/Just";
 
 
 export const router = createBrowserRouter([
@@ -21,7 +25,7 @@ export const router = createBrowserRouter([
       children:[
         {
             path:'/',
-            element:<Dashboard></Dashboard>
+            element:<SignIn></SignIn>
         },
         {
             path:'/category',
@@ -69,13 +73,26 @@ export const router = createBrowserRouter([
             element:<Report></Report>
         },
         {
-            path:'/signIn',
-            element:<SignIn></SignIn>
+            path:'/dashboard',
+            element:<Dashboard></Dashboard>
         },
-        // {
-        //     path:'/signUp',
-        //     element:<Report></Report>
-        // },
+        {
+            path:'/register',
+            element:<Register></Register>
+        },
+        {
+            path:'/userManage',
+            element:<ManageUser></ManageUser>
+        },
+        {
+            path: '/updateUsers/:id',
+            element: <UpdateRoles />,
+            loader: ({ params }) => fetch(`http://localhost:8000/users/${params.id}`)
+        },
+        {
+            path:'/just',
+            element:<Just></Just>
+        },
       ]
     },
     

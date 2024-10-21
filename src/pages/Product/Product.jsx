@@ -158,6 +158,7 @@ const Product = () => {
         });
     };
 
+    
     return (
         <div>
             <div className="mb-6 flex justify-between items-center">

@@ -9,7 +9,7 @@ const UpdateProduct = () => {
     const {
         _id,
         product_name,
-        image,
+       
         quantity,
         supplier_name,
         purchase_price,
@@ -21,14 +21,13 @@ const UpdateProduct = () => {
             e.preventDefault();
             const form = e.target;
             const product_name = form.product_name.value
-            const image = form.image.value
             const quantity = form.quantity.value
             const supplier_name = form.supplier_name.value
             const purchase_price = form.purchase_price.value
             const sales_price = form.sales_price.value
             const category = form.category.value
     
-            const foodData = {product_name, image, quantity,supplier_name,purchase_price,sales_price,category}
+            const foodData = {product_name,  quantity,supplier_name,purchase_price,sales_price,category}
             // console.log(foodData);
     
             fetch(`http://localhost:8000/product/${_id}` ,{
@@ -55,10 +54,7 @@ const UpdateProduct = () => {
                 <label htmlFor="product_name" className="block font-medium ">Product Name</label>
                 <input type="text" id="product_name" name="product_name" defaultValue={product_name} placeholder="Product Name" required className="mt-1 block w-full rounded-md shadow-sm h-10 px-2 border border-violet-500" />
             </div>
-            <div className="mb-3">
-                <label htmlFor="image" className="block font-medium ">Product Image</label>
-                <input type="url" id="image" defaultValue={image}  name="image" placeholder="Image" className="mt-1 block w-full rounded-md border border-violet-500 shadow-sm h-10 px-2" />
-            </div>
+           
            <div className="flex space-x-2">
            <div className="mb-3 flex-grow">
                 <label htmlFor="quantity" className="block font-medium ">Quantity</label>

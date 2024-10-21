@@ -42,7 +42,7 @@ const Purchase = () => {
     };
 
     const filteredPurchase = purchase
-        .filter((item) => item.supplier_name.toLowerCase().includes(searchQuery.toLowerCase()))
+        .filter((item) => item?.supplier_name?.toLowerCase().includes(searchQuery.toLowerCase()))
         .sort((a, b) => {
             if (sortOrder === "recent") {
                 return new Date(b.timestamp) - new Date(a.timestamp);
@@ -180,6 +180,7 @@ const Purchase = () => {
                         <th className="text-center border-r p-3">Image</th>
                         <th className="text-center border-r p-3">Supplier Name</th>
                         <th className="text-center border-r p-3">Product Name</th>
+                        <th className="text-center border-r p-3">Quantity</th>
                         <th className="text-center border-r p-3">Purchase Price</th>
                         <th className="text-center border-r p-3">Action</th>
                     </tr>
@@ -198,6 +199,7 @@ const Purchase = () => {
                                 </div></td>
                             <td className="text-center px-4 py-2 border-r">{item.supplier_name}</td>
                             <td className="text-center px-4 py-2 border-r">{item.product_name}</td>
+                            <td className="text-center px-4 py-2 border-r">{item.quantity}</td>
                             <td className="text-center px-4 py-2 border-r">${item.purchase_price * item.quantity}</td>
                             <td className="text-center px-4 py-2 border-r">
                                 <div className="flex justify-center gap-2">

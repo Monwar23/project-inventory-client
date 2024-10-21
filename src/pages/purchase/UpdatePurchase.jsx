@@ -11,7 +11,7 @@ const UpdatePurchase = () => {
     const [supplier] = useSupplier();
 
     const {
-        _id, supplier_name, product_name, category: defaultCategory,
+        _id, supplier_name, product_name,image, category: defaultCategory,
         quantity, purchase_price, 
     } = purchase;
 
@@ -20,12 +20,13 @@ const UpdatePurchase = () => {
         const form = e.target;
         const supplier_name = form.supplier_name.value;
         const product_name = form.product_name.value;
+        // const image=image;
         const category = form.category.value;
         const quantity = form.quantity.value;
         const purchase_price = form.purchase_price.value;
 
         const purchaseData = {
-            supplier_name, product_name, category,  quantity, purchase_price, 
+            supplier_name, product_name, category,  quantity, purchase_price,image 
         };
 
         fetch(`http://localhost:8000/purchase/${_id}`, {

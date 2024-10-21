@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const Dashboard = () => {
     const [stats, setStats] = useState({
@@ -32,7 +33,7 @@ const Dashboard = () => {
         fetchStats();
     }, []);
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <LoadingSpinner></LoadingSpinner>
     if (error) return <div className="text-red-500">{error}</div>;
 
     return (
@@ -46,8 +47,8 @@ const Dashboard = () => {
                 <StatCard title="Total Suppliers" value={stats.totalSuppliers} bgColor="bg-purple-500" />
                 <StatCard title="Total Purchases" value={stats.totalPurchases} bgColor="bg-pink-500" />
                 <StatCard title="Total Sales" value={stats.totalSales} bgColor="bg-yellow-500" />
-                <StatCard title="Total Purchases Amount" value={`$${stats.totalPurchasesAmount.toFixed(2)}`} bgColor="bg-red-500" /> {/* Updated Card */}
-                <StatCard title="Total Sales Amount" value={`$${stats.totalSalesAmount.toFixed(2)}`} bgColor="bg-orange-500" /> {/* Updated Card */}
+                <StatCard title="Total Purchases Amount" value={`$${stats.totalPurchasesAmount}`} bgColor="bg-red-500" /> {/* Updated Card */}
+                <StatCard title="Total Sales Amount" value={`$${stats.totalSalesAmount}`} bgColor="bg-orange-500" /> {/* Updated Card */}
             </div>
         </div>
     );
