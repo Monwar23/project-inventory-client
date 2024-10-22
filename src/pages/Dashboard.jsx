@@ -32,7 +32,7 @@ const Dashboard = () => {
         };
         fetchStats();
     }, []);
-
+    
     if (loading) return <LoadingSpinner></LoadingSpinner>
     if (error) return <div className="text-red-500">{error}</div>;
 
