@@ -6,7 +6,6 @@ import Product from "../pages/Product/Product";
 import Supplier from "../pages/supplier/Supplier";
 import Purchase from "../pages/purchase/Purchase";
 import Sales from "../pages/sales/Sales";
-import Report from "../pages/report/Report";
 import UpdateProduct from "../pages/Product/UpdateProduct";
 import UpdateSupplier from "../pages/supplier/UpdateSupplier";
 import UpdatePurchase from "../pages/purchase/UpdatePurchase";
@@ -16,12 +15,17 @@ import Register from "../pages/Signin/Register";
 import ManageUser from "../pages/users/ManageUser";
 import UpdateRoles from "../pages/users/UpdateRoles";
 import Just from "../pages/Signin/Just";
+import ErrorPage from "../pages/ErrorPage";
+import AdminRoutes from "./AdminRoutes";
+import PrivateRoutes from "./PrivatesRoutes";
+import ManageUserAdminRoutes from "./ManageUserAdminRoutes";
 
 
 export const router = createBrowserRouter([
     {
       path: "/",
       element: <Main></Main>,
+      errorElement:<ErrorPage></ErrorPage>,
       children:[
         {
             path:'/',
@@ -29,52 +33,49 @@ export const router = createBrowserRouter([
         },
         {
             path:'/category',
-            element:<Category></Category>
+            element:<PrivateRoutes><AdminRoutes><Category></Category></AdminRoutes></PrivateRoutes>
         },
         {
             path:'/product',
-            element:<Product></Product>
+            element:<PrivateRoutes><AdminRoutes><Product></Product></AdminRoutes></PrivateRoutes>
         },
         {
             path:'/updateProduct/:id',
-            element:<UpdateProduct></UpdateProduct>,
+            element:<PrivateRoutes><AdminRoutes><UpdateProduct></UpdateProduct></AdminRoutes></PrivateRoutes>,
             loader:({params})=>fetch(`http://localhost:8000/product/${params.id}`)
         },
        
         {
             path:'/supplier',
-            element:<Supplier></Supplier>
+            element:<PrivateRoutes><AdminRoutes><Supplier></Supplier></AdminRoutes></PrivateRoutes>
         },
         {
             path:'/updateSupplier/:id',
-            element:<UpdateSupplier></UpdateSupplier>,
+            element:<PrivateRoutes><AdminRoutes><UpdateSupplier></UpdateSupplier></AdminRoutes></PrivateRoutes>,
             loader:({params})=>fetch(`http://localhost:8000/supplier/${params.id}`)
         },
         {
             path:'/purchase',
-            element:<Purchase></Purchase>
+            element:<PrivateRoutes><AdminRoutes><Purchase></Purchase></AdminRoutes></PrivateRoutes>
         },
         {
             path:'/updatePurchase/:id',
-            element:<UpdatePurchase></UpdatePurchase>,
+            element:<PrivateRoutes><AdminRoutes><UpdatePurchase></UpdatePurchase></AdminRoutes></PrivateRoutes>,
             loader:({params})=>fetch(`http://localhost:8000/purchase/${params.id}`)
         },
         {
             path:'/sales',
-            element:<Sales></Sales>
+            element:<PrivateRoutes><AdminRoutes><Sales></Sales></AdminRoutes></PrivateRoutes>
         },
         {
             path:'/updateSales/:id',
-            element:<UpdateSales></UpdateSales>,
+            element:<PrivateRoutes><AdminRoutes><UpdateSales></UpdateSales></AdminRoutes></PrivateRoutes>,
             loader:({params})=>fetch(`http://localhost:8000/sales/${params.id}`)
         },
-        {
-            path:'/report',
-            element:<Report></Report>
-        },
+       
         {
             path:'/dashboard',
-            element:<Dashboard></Dashboard>
+            element:<PrivateRoutes><AdminRoutes><Dashboard></Dashboard></AdminRoutes></PrivateRoutes>
         },
         {
             path:'/register',
@@ -82,16 +83,16 @@ export const router = createBrowserRouter([
         },
         {
             path:'/userManage',
-            element:<ManageUser></ManageUser>
+            element:<PrivateRoutes><ManageUserAdminRoutes><ManageUser></ManageUser></ManageUserAdminRoutes> </PrivateRoutes>
         },
         {
             path: '/updateUsers/:id',
-            element: <UpdateRoles />,
+            element: <PrivateRoutes><ManageUserAdminRoutes><UpdateRoles /></ManageUserAdminRoutes></PrivateRoutes>,
             loader: ({ params }) => fetch(`http://localhost:8000/users/${params.id}`)
         },
         {
             path:'/just',
-            element:<Just></Just>
+            element:<PrivateRoutes><Just></Just></PrivateRoutes>
         },
       ]
     },
