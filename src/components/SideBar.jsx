@@ -1,5 +1,6 @@
-import { BiSolidCategoryAlt, BiSolidPurchaseTag,  } from "react-icons/bi";
+import { BiSolidCategoryAlt, BiSolidPurchaseTag } from "react-icons/bi";
 import { FaPeopleCarry, FaSignInAlt, FaUserEdit } from "react-icons/fa";
+import { CgProfile } from "react-icons/cg";
 import { MdAddShoppingCart, MdDashboard, MdOutlineProductionQuantityLimits } from "react-icons/md";
 import { Link, NavLink } from "react-router-dom";
 import UseAuth from "../hooks/UseAuth";
@@ -10,7 +11,7 @@ const SideBar = () => {
 
     const { user, logOut } = UseAuth();
     const [role] = useAdmin();
-    console.log(role);
+    // console.log(role);
 
     const handleSignOut = () => {
         logOut();
@@ -73,7 +74,7 @@ const SideBar = () => {
                                     } to="/sales">Sales</NavLink></span>
                                 </a>
                             </li>
-                            
+
                         </ul>
                         <ul className="pt-4 pb-2 space-y-1 text-sm">
                             <li>
@@ -163,17 +164,26 @@ const SideBar = () => {
                                     } to="/sales">Sales</NavLink></span>
                                 </a>
                             </li>
-                            
+
                         </ul>
                         <ul className="pt-4 pb-2 space-y-1 text-sm">
 
                             {user ?
+                            <>
+                            <li>
+                                    <a rel="noopener noreferrer" href="#" className="flex items-center p-2 space-x-3 rounded-md font-medium hover:text-violet-500 text-black">
+                                        <CgProfile className="text-violet-500" />
+                                        <span><Link>{user?.email}</Link></span>
+                                    </a>
+                                </li> 
                                 <li>
                                     <a rel="noopener noreferrer" href="#" className="flex items-center p-2 space-x-3 rounded-md font-medium hover:text-violet-500 text-black">
                                         <FaSignInAlt className="text-violet-500" />
                                         <span><Link onClick={handleSignOut} >LogOut</Link></span>
                                     </a>
-                                </li> :
+                                </li> 
+                                </>
+                                :
                                 <div>
                                     <li>
                                         <a rel="noopener noreferrer" href="#" className="flex items-center p-2 space-x-3 rounded-md">
@@ -197,16 +207,14 @@ const SideBar = () => {
                     <>
                         <ul className="pt-2 pb-4 border-b space-y-1 text-sm">
 
-                           
-                                <li>
-                                    <a rel="noopener noreferrer" href="#" className="flex items-center p-2 space-x-3 rounded-md font-medium hover:text-violet-500 text-black">
-                                        <FaSignInAlt className="text-violet-500" />
-                                        <span><Link onClick={handleSignOut} >LogOut</Link></span>
-                                    </a>
-                                </li> 
+                        
 
-
-                
+                            <li>
+                                <a rel="noopener noreferrer" href="#" className="flex items-center p-2 space-x-3 rounded-md font-medium hover:text-violet-500 text-black">
+                                    <FaSignInAlt className="text-violet-500" />
+                                    <span><Link onClick={handleSignOut} >LogOut</Link></span>
+                                </a>
+                            </li>
 
                         </ul>
 
