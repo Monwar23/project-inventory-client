@@ -122,6 +122,11 @@ const Sales = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        const selectedProduct = products.find(prod => prod.product_name === newSalesData.product_name);
+        if (selectedProduct && newSalesData.quantity > selectedProduct.quantity) {
+            Swal.fire("Error", "Sales quantity exceeds available product quantity", "error");
+            return; // Exit the function if the check fails
+        }
         axiosSecure.post('/sales', newSalesData)
             .then(response => {
                 refetch(); // Refetch after adding new sales

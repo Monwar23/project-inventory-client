@@ -1,4 +1,4 @@
-import { BiSolidCategoryAlt, BiSolidPurchaseTag, BiSolidReport } from "react-icons/bi";
+import { BiSolidCategoryAlt, BiSolidPurchaseTag,  } from "react-icons/bi";
 import { FaPeopleCarry, FaSignInAlt, FaUserEdit } from "react-icons/fa";
 import { MdAddShoppingCart, MdDashboard, MdOutlineProductionQuantityLimits } from "react-icons/md";
 import { Link, NavLink } from "react-router-dom";
@@ -73,14 +73,7 @@ const SideBar = () => {
                                     } to="/sales">Sales</NavLink></span>
                                 </a>
                             </li>
-                            <li>
-                                <a rel="noopener noreferrer" href="#" className="flex items-center p-2 space-x-3 rounded-md">
-                                    <BiSolidReport className="text-violet-500 " />
-                                    <span><NavLink className={({ isActive }) =>
-                                        isActive ? 'text-violet-500  font-medium' : 'font-medium'
-                                    } to="/report">Report</NavLink></span>
-                                </a>
-                            </li>
+                            
                         </ul>
                         <ul className="pt-4 pb-2 space-y-1 text-sm">
                             <li>
@@ -170,14 +163,7 @@ const SideBar = () => {
                                     } to="/sales">Sales</NavLink></span>
                                 </a>
                             </li>
-                            <li>
-                                <a rel="noopener noreferrer" href="#" className="flex items-center p-2 space-x-3 rounded-md">
-                                    <BiSolidReport className="text-violet-500 " />
-                                    <span><NavLink className={({ isActive }) =>
-                                        isActive ? 'text-violet-500  font-medium' : 'font-medium'
-                                    } to="/report">Report</NavLink></span>
-                                </a>
-                            </li>
+                            
                         </ul>
                         <ul className="pt-4 pb-2 space-y-1 text-sm">
 

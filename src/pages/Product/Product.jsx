@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 
 const Product = () => {
     const [product, refetch] = useProduct();
+    // console.log(product);
     const axiosSecure = useAxiosSecure();
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
