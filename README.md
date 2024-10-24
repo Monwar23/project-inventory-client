@@ -1,8 +1,13 @@
-# React + Vite
+# Stocksavvy
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Live : https://stocksavvy108.netlify.app/
 
-Currently, two official plugins are available:
+## For run :
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- git clone
+- npm i
+- create .env.local and set : VITE_IMAGE_HOSTING_KEY=your VITE_IMAGE_HOSTING_KEY
+- npm run dev
+ 
+ ## for run backend : go to : https://github.com/Monwar23/project-inventory-server
+
